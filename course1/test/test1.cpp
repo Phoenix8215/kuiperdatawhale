@@ -1,6 +1,3 @@
-//
-// Created by fss on 23-5-28.
-//
 #include <armadillo>
 #include <glog/logging.h>
 #include <gtest/gtest.h>

@@ -1,12 +1,10 @@
-//
-// Created by fss on 23-5-28.
-//
 #include <armadillo>
 #include <glog/logging.h>
 #include <gtest/gtest.h>
 void Axby(const arma::fmat &x, const arma::fmat &w, const arma::fmat &b,
           arma::fmat &y) {
   // 把代码写这里 完成y = w * x + b的运算
+  y = w * x + b;
 }
 
 TEST(test_arma, Axby) {
@@ -34,6 +32,7 @@ TEST(test_arma, Axby) {
 
 void EPowerMinus(const arma::fmat &x, arma::fmat &y) {
   // 把代码写这里 完成y = e^{-x}的运算
+  y = arma::exp(-x); // 注意exp和expmt的计算结果不一样，expmt的误差更大
 }
 
 TEST(test_arma, e_power_minus) {
@@ -44,15 +43,20 @@ TEST(test_arma, e_power_minus) {
 
   fmat y;
   EPowerMinus(x, y);
-  std::vector<float> x1(x.mem, x.mem + 224 * 224);
+  std::vector<float> x1(x.mem, x.mem + 224 * 224);// 使用两个迭代器来指定一个范围
   ASSERT_EQ(y.empty(), false);
   for (int i = 0; i < 224 * 224; ++i) {
-    ASSERT_LE(std::abs(std::exp(-x1.at(i)) - y.at(i)), 1e-5f);
+    ASSERT_LE(std::abs(std::exp(-x1.at(i)) - y.at(i)), 1e-5f);// Assert Less than or Equal
   }
 }
 
 void Axpy(const arma::fmat &x, arma::fmat &Y, float a, float y) {
   // 编写Y = a * x + y
+  int col = x.n_cols;
+  int row = x.n_rows;
+  arma::fmat a_t(col, row, arma::fill::value(a));
+  arma::fmat y_t(col, row, arma::fill::value(y));
+  Y = a_t % x + y_t;
 }
 
 TEST(test_arma, axpy) {
