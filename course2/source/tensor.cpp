@@ -28,7 +28,7 @@ Tensor<float>::Tensor(uint32_t rows, uint32_t cols) {
 Tensor<float>::Tensor(const std::vector<uint32_t>& shapes) {
   CHECK(!shapes.empty() && shapes.size() <= 3);
 
-  uint32_t remaining = 3 - shapes.size();
+  uint32_t remaining = 3 - shapes.size(); // attention!
   std::vector<uint32_t> shapes_(3, 1);
   std::copy(shapes.begin(), shapes.end(), shapes_.begin() + remaining);
 
@@ -200,6 +200,15 @@ void Tensor<float>::Show() {
 void Tensor<float>::Flatten(bool row_major) {
   CHECK(!this->data_.empty());
   // 请补充代码
+  const uint32_t current_size =
+      std::accumulate(this->raw_shapes_.begin(), this->raw_shapes_.end(), 1, std::multiplies());
+  this->raw_shapes_ = std::vector<uint32_t>{current_size};
+  if (!row_major) {
+    std::vector<float> values = this->values();// 同一个对象的类成员函数相互调用
+    this->data_.reshape(1, current_size, 1);
+    this->Fill(values);
+  }
+  this->data_.reshape(1, current_size, 1);
 }
 
 void Tensor<float>::Rand() {
@@ -239,7 +248,7 @@ void Tensor<float>::Reshape(const std::vector<uint32_t>& shapes,
     values = this->values(true);
   }
   if (shapes.size() == 3) {
-    this->data_.reshape(shapes.at(1), shapes.at(2), shapes.at(0));
+    this->data_.reshape(shapes.at(1), shapes.at(2), shapes.at(0));// .reshape( n_rows, n_cols, n_slices )
     this->raw_shapes_ = {shapes.at(0), shapes.at(1), shapes.at(2)};
   } else if (shapes.size() == 2) {
     this->data_.reshape(shapes.at(0), shapes.at(1), 1);

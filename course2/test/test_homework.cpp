@@ -1,24 +1,46 @@
-//
-// Created by fss on 23-6-4.
-//
 #include "data/tensor.hpp"
 #include <glog/logging.h>
 #include <gtest/gtest.h>
 
 TEST(test_homework, homework1_flatten1) {
   using namespace kuiper_infer;
-  Tensor<float> f1(2, 3, 4);
+  Tensor<float> f1(1, 3, 4);
+  f1.Rand();
   f1.Flatten(true);
   ASSERT_EQ(f1.raw_shapes().size(), 1);
-  ASSERT_EQ(f1.raw_shapes().at(0), 24);
+  ASSERT_EQ(f1.raw_shapes().at(0), 12);
+  f1.Show();
 }
 
 TEST(test_homework, homework1_flatten2) {
   using namespace kuiper_infer;
   Tensor<float> f1(12, 24);
+  f1.Rand();
   f1.Flatten(true);
   ASSERT_EQ(f1.raw_shapes().size(), 1);
   ASSERT_EQ(f1.raw_shapes().at(0), 24 * 12);
+  f1.Show();
+}
+
+TEST(test_homework, homework1_flatten3) {
+  using namespace kuiper_infer;
+  Tensor<float> f1(1, 3, 4);
+  f1.Rand();
+  f1.Flatten(false);
+  ASSERT_EQ(f1.raw_shapes().size(), 1);
+  ASSERT_EQ(f1.raw_shapes().at(0), 12);
+  f1.Show();
+}
+
+TEST(test_homework, homework1_flatten4)
+{
+  using namespace kuiper_infer;
+  Tensor<float> f1(3, 4);
+  f1.Rand();
+  f1.Flatten(false);
+  ASSERT_EQ(f1.raw_shapes().size(), 1);
+  ASSERT_EQ(f1.raw_shapes().at(0), 12);
+  f1.Show();
 }
 
 TEST(test_homework, homework2_padding1) {
