@@ -31,6 +31,9 @@
 *.out
 *.app
 
+
+openworld.sh
+
 .idea/.name
 
 .idea/codeStyles/codeStyleConfig.xml
