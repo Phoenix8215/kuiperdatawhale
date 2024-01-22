@@ -77,3 +77,41 @@ TEST(test_tensor, tensor_init3D_1) {
   LOG(INFO) << "data numbers: " << size;
   f1.Show();
 }
+
+
+TEST(test_tensor, tensor_init3D_4) {
+  using namespace kuiper_infer;
+  std::vector<uint32_t> shape = {2, 3, 4};
+  Tensor<float> f1(shape);
+  f1.Fill(1.f);
+
+  const auto &raw_shapes = f1.raw_shapes();
+  LOG(INFO) << "-----------------------Tensor3D by vector-----------------------";
+  LOG(INFO) << "raw shapes size: " << raw_shapes.size();
+  const uint32_t channels = raw_shapes.at(0);
+  const uint32_t rows = raw_shapes.at(1);
+  const uint32_t cols = raw_shapes.at(2);
+
+  LOG(INFO) << "data channels: " << channels;
+  LOG(INFO) << "data rows: " << rows;
+  LOG(INFO) << "data cols: " << cols;
+  f1.Show();
+}
+
+TEST(test_tensor, tensor_init3D_5)
+{
+  using namespace kuiper_infer;
+  std::vector<uint32_t> shape = {2, 3};
+  Tensor<float> f1(shape);
+  f1.Fill(1.f);
+
+  const auto &raw_shapes = f1.raw_shapes();
+  LOG(INFO) << "-----------------------Tensor3D by vector-----------------------";
+  LOG(INFO) << "raw shapes size: " << raw_shapes.size();
+  const uint32_t rows = raw_shapes.at(0);
+  const uint32_t cols = raw_shapes.at(1);
+
+  LOG(INFO) << "data rows: " << rows;
+  LOG(INFO) << "data cols: " << cols;
+  f1.Show();
+}

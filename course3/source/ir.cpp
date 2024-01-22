@@ -480,24 +480,31 @@ Parameter Parameter::parse_from_string(const std::string& value)
         p.b = value == "True";
         return p;
     }
-
+    // 判断字符串 `value` 的第一个字符是不是 '(' 或 '['
     if (value[0] == '(' || value[0] == '[')
     {
         // list
         std::string lc = value.substr(1, value.size() - 2);
+        /*
+        使用 `std::istringstream`，代码将字符串 `lc` 转换为一个字符串流 `lcss`，
+        然后使用 `while` 循环和 `std::getline` 函数来逐个解析列表中的元素。元素之间以逗号 (',') 分隔。
+        */
         std::istringstream lcss(lc);
 
         while (!lcss.eof())
         {
             std::string elem;
             std::getline(lcss, elem, ',');
-
+            /*
+            如果元素的第一个字符不是数字或负号（'-'），或者即使是负号，其后的字符也不是数字，则认为该元素是字符串。
+            */
             if ((elem[0] != '-' && (elem[0] < '0' || elem[0] > '9')) || (elem[0] == '-' && (elem[1] < '0' || elem[1] > '9')))
             {
                 // string
                 p.type = 7;
                 p.as.push_back(elem);
             }
+            // 如果元素中包含点号 ('.') 或 'e'（表示科学计数法），则认为该元素是浮点数。
             else if (elem.find('.') != std::string::npos || elem.find('e') != std::string::npos)
             {
                 // float
@@ -505,6 +512,7 @@ Parameter Parameter::parse_from_string(const std::string& value)
                 p.af.push_back(std::stof(elem));
             }
             else
+            // 如果上述条件都不满足，则认为元素是整数
             {
                 // integer
                 p.type = 5;
@@ -741,14 +749,14 @@ int Graph::load(const std::string& parampath, const std::string& binpath)
 
         iss >> type >> name >> input_count >> output_count;
 
-        Operator* op = new_operator(type, name);
+        Operator* op = new_operator(type, name);//nn.Linear,linear
 
         for (int j = 0; j < input_count; j++)
         {
             std::string operand_name;
             iss >> operand_name;
 
-            Operand* r = get_operand(operand_name);
+            Operand* r = get_operand(operand_name);//operand_name是唯一的
             r->consumers.push_back(op);
             op->inputs.push_back(r);
         }

@@ -39,7 +39,7 @@ namespace kuiper_infer
     CHECK(!shapes.empty() && shapes.size() <= 3);
 
     uint32_t remaining = 3 - shapes.size(); // attention!
-    std::vector<uint32_t> shapes_(3, 1);
+    std::vector<uint32_t> shapes_(3, 1);// 3个元素全部为1
     std::copy(shapes.begin(), shapes.end(), shapes_.begin() + remaining);
 
     uint32_t channels = shapes_.at(0);
